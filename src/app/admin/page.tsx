@@ -30,6 +30,7 @@ export default function AdminPage() {
   const [showForm, setShowForm] = useState(false)
   const [deleteDialog, setDeleteDialog] = useState<{ open: boolean; showId: string | null; showName: string }>({ open: false, showId: null, showName: '' })
   const [deleting, setDeleting] = useState(false)
+  const [editingShowId, setEditingShowId] = useState<string | null>(null)
   const [form, setForm] = useState({
     name: '',
     description: '',
@@ -60,25 +61,59 @@ export default function AdminPage() {
     setLoading(false)
   }
 
-  const handleCreateShow = async (e: React.FormEvent) => {
+  const handleSubmitShow = async (e: React.FormEvent) => {
     e.preventDefault()
     setCreating(true)
 
-    const { error } = await supabase.from('shows').insert({
+    const showData = {
       name: form.name,
       description: form.description,
       date: new Date(form.date).toISOString(),
       venue: form.venue,
       total_seats: parseInt(form.total_seats),
       price: parseFloat(form.price)
-    })
+    }
+
+    let error
+    if (editingShowId) {
+      // Update existing show
+      const { error: updateError } = await supabase
+        .from('shows')
+        .update(showData)
+        .eq('id', editingShowId)
+      error = updateError
+    } else {
+      // Create new show
+      const { error: insertError } = await supabase.from('shows').insert(showData)
+      error = insertError
+    }
 
     if (!error) {
       setForm({ name: '', description: '', date: '', venue: '', total_seats: '100', price: '' })
       setShowForm(false)
+      setEditingShowId(null)
       fetchShows()
     }
     setCreating(false)
+  }
+
+  const handleEditShow = (show: Show) => {
+    setForm({
+      name: show.name,
+      description: show.description,
+      date: new Date(show.date).toISOString().slice(0, 16), // Format for datetime-local input
+      venue: show.venue,
+      total_seats: show.total_seats.toString(),
+      price: show.price.toString()
+    })
+    setEditingShowId(show.id)
+    setShowForm(true)
+  }
+
+  const handleCancelEdit = () => {
+    setForm({ name: '', description: '', date: '', venue: '', total_seats: '100', price: '' })
+    setEditingShowId(null)
+    setShowForm(false)
   }
 
   const openDeleteDialog = (id: string, name: string) => {
@@ -122,15 +157,15 @@ export default function AdminPage() {
       <main className="max-w-5xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-semibold text-foreground">Manage Shows</h1>
-          <Button onClick={() => setShowForm(!showForm)} className="bg-primary hover:bg-primary/90 text-primary-foreground">
+          <Button onClick={() => editingShowId ? handleCancelEdit() : setShowForm(!showForm)} className="bg-primary hover:bg-primary/90 text-primary-foreground">
             {showForm ? 'Cancel' : '+ Create Show'}
           </Button>
         </div>
 
         {showForm && (
           <div className="border border-border rounded-lg p-5 bg-card mb-6">
-            <h2 className="font-medium text-foreground mb-4">New Show</h2>
-            <form onSubmit={handleCreateShow} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <h2 className="font-medium text-foreground mb-4">{editingShowId ? 'Edit Show' : 'New Show'}</h2>
+            <form onSubmit={handleSubmitShow} className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-foreground mb-1.5">Show Name</label>
                 <Input
@@ -195,7 +230,7 @@ export default function AdminPage() {
               </div>
               <div className="md:col-span-2">
                 <Button type="submit" disabled={creating} className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  {creating ? 'Creating...' : 'Create Show'}
+                  {creating ? (editingShowId ? 'Updating...' : 'Creating...') : (editingShowId ? 'Update Show' : 'Create Show')}
                 </Button>
               </div>
             </form>
@@ -221,14 +256,24 @@ export default function AdminPage() {
                       <span className="bg-primary/10 text-primary px-2 py-1 rounded font-medium">₹{show.price}</span>
                     </div>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    onClick={() => openDeleteDialog(show.id, show.name)}
-                    className="border-destructive/50 text-destructive hover:bg-destructive/10"
-                  >
-                    Delete
-                  </Button>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => handleEditShow(show)}
+                      className="border-primary/50 text-primary hover:bg-primary/10"
+                    >
+                      Edit
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => openDeleteDialog(show.id, show.name)}
+                      className="border-destructive/50 text-destructive hover:bg-destructive/10"
+                    >
+                      Delete
+                    </Button>
+                  </div>
                 </div>
               </div>
             ))
