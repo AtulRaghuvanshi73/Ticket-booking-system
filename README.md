@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TicketHub
+
+TicketHub is a modern web application for ticket booking and event management. Built with Next.js and powered by Supabase, it provides a seamless experience for users to browse upcoming shows, book tickets, and manage their reservations. Admins can create and manage events through a dedicated dashboard.
+
+## Features
+
+- **User Authentication**: Secure login and registration with role-based access (user and admin).
+- **Show Management**: Browse upcoming shows with details like date, venue, price, and available seats.
+- **Ticket Booking**: Easy booking process with seat selection and payment integration (via Supabase).
+- **Bookings Dashboard**: View and manage personal bookings, including cancellation options.
+- **Admin Panel**: Create, edit, and delete shows; manage event details.
+- **Responsive Design**: Mobile-friendly interface using Tailwind CSS and Radix UI components.
+- **Dark/Light Theme**: Toggle between themes for better user experience.
+- **Real-time Updates**: Integrated with Supabase for real-time data synchronization.
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS, Radix UI components
+- **Backend**: Supabase (PostgreSQL database, authentication, real-time subscriptions)
+- **State Management**: React Context API
+- **Icons**: Lucide React
+- **Animations**: Framer Motion
+- **Forms**: React Hook Form with resolvers
+- **Date Handling**: date-fns
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Bun
+- A Supabase account and project
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/AtulRaghuvanshi73/Ticket-booking-system
+   cd Ticket-booking-system
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+2. Install dependencies:
+   ```bash
+   npm i 
+   or
+   bun install
+   ```
 
-## Learn More
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Run the development server:
+   ```bash
+   bun dev
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Database Setup
 
-## Deploy on Vercel
+Ensure your Supabase database has the following tables:
+- `users` (managed by Supabase Auth)
+- `shows` (id, name, description, date, venue, total_seats, price)
+- `bookings` (id, user_id, show_id, seat_numbers, status, total_amount, created_at)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Usage
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Home Page**: Landing page with navigation to login/register.
+- **Login/Register**: Authenticate to access the app.
+- **Shows**: View upcoming events and book tickets.
+- **Bookings**: Manage your ticket reservations.
+- **Admin**: (Admin role only) Manage shows and events.
+
+## Scripts
+
+- `bun run dev` - Start development server with Turbopack
+- `bun run build` - Build for production
+- `bun run start` - Start production server
+- `bun run lint` - Run ESLint
+
