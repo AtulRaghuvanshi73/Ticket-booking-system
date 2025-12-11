@@ -2,6 +2,8 @@
 
 TicketHub is a modern web application for ticket booking and event management. Built with Next.js and powered by Supabase, it provides a seamless experience for users to browse upcoming shows, book tickets, and manage their reservations. Admins can create and manage events through a dedicated dashboard.
 
+<a href="https://ticket-booking-system-01.netlify.app/">Check out the site</a>
+
 ## Features
 
 - **User Authentication**: Secure login and registration with role-based access (user and admin).
