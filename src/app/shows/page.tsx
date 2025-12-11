@@ -94,7 +94,7 @@ export default function ShowsPage() {
                   <span className="bg-muted text-muted-foreground px-2 py-1 rounded">
                     {new Date(show.date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} @ {new Date(show.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
-                  <span className="bg-primary/10 text-primary px-2 py-1 rounded font-medium">${show.price}/seat</span>
+                  <span className="bg-primary/10 text-primary px-2 py-1 rounded font-medium">₹{show.price}/seat</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted-foreground text-sm">{show.total_seats} seats</span>

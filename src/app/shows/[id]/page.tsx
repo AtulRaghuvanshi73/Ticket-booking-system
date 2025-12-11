@@ -139,7 +139,7 @@ export default function BookShowPage({ params }: { params: Promise<{ id: string 
           <div className="flex flex-wrap gap-2 text-xs">
             <span className="bg-muted text-muted-foreground px-2 py-1 rounded">{show.venue}</span>
             <span className="bg-muted text-muted-foreground px-2 py-1 rounded">{new Date(show.date).toLocaleString()}</span>
-            <span className="bg-primary/10 text-primary px-2 py-1 rounded font-medium">${show.price}/seat</span>
+            <span className="bg-primary/10 text-primary px-2 py-1 rounded font-medium">₹{show.price}/seat</span>
           </div>
         </div>
 
@@ -223,7 +223,7 @@ export default function BookShowPage({ params }: { params: Promise<{ id: string 
               </div>
               <div className="text-right">
                 <p className="text-xl font-semibold text-foreground">
-                  ${(selectedSeats.length * show.price).toFixed(2)}
+                  ₹{(selectedSeats.length * show.price).toFixed(2)}
                 </p>
               </div>
             </div>

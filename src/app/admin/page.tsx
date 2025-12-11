@@ -218,7 +218,7 @@ export default function AdminPage() {
                       <span className="bg-muted text-muted-foreground px-2 py-1 rounded">{show.venue}</span>
                       <span className="bg-muted text-muted-foreground px-2 py-1 rounded">{new Date(show.date).toLocaleString()}</span>
                       <span className="bg-muted text-muted-foreground px-2 py-1 rounded">{show.total_seats} seats</span>
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded font-medium">${show.price}</span>
+                      <span className="bg-primary/10 text-primary px-2 py-1 rounded font-medium">₹{show.price}</span>
                     </div>
                   </div>
                   <Button 
